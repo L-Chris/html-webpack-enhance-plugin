@@ -6,8 +6,8 @@ module.exports = class HtmlWebpackEnhancePlugin {
   apply (compiler) {
     const self = this
 
-    compiler.hooks.compilation.tap('HtmlWebpackEnhance', function (compilation) {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync('HtmlWebpackEnhance', function (data, callback) {
+    compiler.plugin('compilation', function (compilation) {
+      compiler.plugin('html-webpack-plugin-before-html-processing', function (data, callback) {
         const oldPublicPath = self.getOriginPublicPath(compilation)
         const {assets} = data
 
@@ -26,7 +26,6 @@ module.exports = class HtmlWebpackEnhancePlugin {
 
         callback(null, data)
       })
-
     })
   }
 
@@ -38,10 +37,10 @@ module.exports = class HtmlWebpackEnhancePlugin {
       ? compilation.mainTemplate.getPublicPath({hash: compilationHash})
       // If no public path was set get a relative url path
       : path.relative(path.resolve(compilation.options.output.path, path.dirname(this.childCompilationOutputName)), compilation.options.output.path)
-        .split(path.sep).join('/');
+        .split(path.sep).join('/')
 
     if (publicPath.length && publicPath.substr(-1, 1) !== '/') {
-      publicPath += '/';
+      publicPath += '/'
     }
 
     return publicPath
