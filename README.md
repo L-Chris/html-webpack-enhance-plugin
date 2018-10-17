@@ -3,6 +3,8 @@ enhance html-webpack-plugin features
 
 ## Install
 ```
+// v1 support webpack3
+// v2 support webpack4
 npm i html-webpack-enhance-plugin -D
 yarn add html-webpack-enhance-plugin -D
 ```
