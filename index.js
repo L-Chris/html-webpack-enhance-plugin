@@ -7,22 +7,11 @@ module.exports = class HtmlWebpackEnhancePlugin {
     const self = this
 
     compiler.hooks.compilation.tap('HtmlWebpackEnhance', function (compilation) {
-      compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync('HtmlWebpackEnhance', function (data, callback) {
+      compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync('HtmlWebpackEnhance', function (data, callback) {
         const oldPublicPath = self.getOriginPublicPath(compilation)
-        const {assets} = data
-
-        // deal with assets
-        Object.keys(assets).forEach(key => {
-          const assetList = assets[key]
-          if (!Array.isArray(assetList)) return
-          assetList.forEach((_, i) => {
-            if (!assets[key][i].path) return
-            assets[key][i].path = assets[key][i].path.replace(new RegExp(`${oldPublicPath}`), self.options.publicPath)
-          })
-        })
 
         // deal with html
-        data.html = data.html.replace(new RegExp(`="${oldPublicPath}`, 'g'), `="${self.options.publicPath}`)
+        data.html = data.html.replace(new RegExp(`=(")?${oldPublicPath}`, 'g'), `=$1${self.options.publicPath}`)
 
         callback(null, data)
       })
