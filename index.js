@@ -11,7 +11,7 @@ module.exports = class HtmlWebpackEnhancePlugin {
         const oldPublicPath = self.getOriginPublicPath(compilation)
 
         // deal with html
-        data.html = data.html.replace(new RegExp(`=(")?${oldPublicPath}`, 'g'), `=$1${self.options.publicPath}`)
+        data.html = data.html.replace(new RegExp(`=(")?(?!//)${oldPublicPath}`, 'g'), `=$1${self.options.publicPath}`)
 
         callback(null, data)
       })
